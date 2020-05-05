@@ -126,7 +126,7 @@ public class TaskController {
         data.put("news_id", task.getNewsId());
         data.put("news_url", task.getNewsUrl());
         data.put("notify_url", notifyUrl);
-        String response = HttpRequest.post("http://127.0.0.1:8000/createTask")
+        String response = HttpRequest.post("http://127.0.0.1:7070/createTask")
                 .body(JSON.toJSONString(data))
                 .execute()
                 .body();
