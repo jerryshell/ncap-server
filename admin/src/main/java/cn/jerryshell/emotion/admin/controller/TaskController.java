@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,6 +35,13 @@ public class TaskController {
     private TaskService taskService;
     @Resource
     private CommentService commentService;
+
+    @Value("${emotion.notify.server}")
+    private String notifyServer;
+    @Value("${emotion.analyse.server}")
+    private String analyseServer;
+    @Value("${emotion.spider.server}")
+    private String spiderServer;
 
     @GetMapping("/task/list/{pageNum}/{pageSize}")
     public R<Page<Task>> list(@PathVariable int pageNum, @PathVariable int pageSize) {
@@ -119,14 +127,15 @@ public class TaskController {
 
     private void startSpiderTask(Task task) {
         String notifyUrl = String.format(
-                "http://127.0.0.1:8080/task/spiderNotify/%s",
+                "%s/task/spiderNotify/%s",
+                notifyServer,
                 task.getId()
         );
         Map<String, String> data = new HashMap<>();
         data.put("news_id", task.getNewsId());
         data.put("news_url", task.getNewsUrl());
         data.put("notify_url", notifyUrl);
-        String response = HttpRequest.post("http://127.0.0.1:7070/createTask")
+        String response = HttpRequest.post(String.format("%s/createTask", spiderServer))
                 .body(JSON.toJSONString(data))
                 .execute()
                 .body();
@@ -217,7 +226,8 @@ public class TaskController {
                 task,
                 taskService,
                 commentList,
-                commentService
+                commentService,
+                analyseServer
         );
         Thread analyseTaskThread = new Thread(analyseTask);
         analyseTaskThread.start();

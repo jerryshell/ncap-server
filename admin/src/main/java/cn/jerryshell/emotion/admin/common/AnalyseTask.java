@@ -20,17 +20,20 @@ public class AnalyseTask implements Runnable {
     private final TaskService taskService;
     private final List<Comment> commentList;
     private final CommentService commentService;
+    private final String analyseServer;
 
     public AnalyseTask(
             Task task,
             TaskService taskService,
             List<Comment> commentList,
-            CommentService commentService
+            CommentService commentService,
+            String analyseServer
     ) {
         this.task = task;
         this.taskService = taskService;
         this.commentList = commentList;
         this.commentService = commentService;
+        this.analyseServer = analyseServer;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class AnalyseTask implements Runnable {
             // 调用情感分析接口
             String response = null;
             try {
-                response = HttpRequest.post("http://120.25.228.43:8000/")
+                response = HttpRequest.post(analyseServer)
                         .body(JSON.toJSONString(data))
                         .execute()
                         .body();
