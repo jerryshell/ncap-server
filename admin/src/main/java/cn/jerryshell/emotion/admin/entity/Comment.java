@@ -1,6 +1,6 @@
 package cn.jerryshell.emotion.admin.entity;
 
-import cn.jerryshell.emotion.admin.entity.dto.SpiderResponseComment;
+import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskResponseComment;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -34,18 +34,18 @@ public class Comment {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDateTime;
 
-    public static Comment from(String newsId, SpiderResponseComment spiderResponseComment) {
+    public static Comment from(String newsId, CommentSpiderTaskResponseComment commentSpiderTaskResponseComment) {
         Comment comment = new Comment();
-        comment.setId(spiderResponseComment.getCommentId());
+        comment.setId(commentSpiderTaskResponseComment.getCommentId());
         comment.setNewsId(newsId);
-        comment.setContent(spiderResponseComment.getContent());
+        comment.setContent(commentSpiderTaskResponseComment.getContent());
         return comment;
     }
 
-    public static List<Comment> from(String newsId, List<SpiderResponseComment> spiderResponseCommentList) {
-        return spiderResponseCommentList
+    public static List<Comment> from(String newsId, List<CommentSpiderTaskResponseComment> commentSpiderTaskResponseCommentList) {
+        return commentSpiderTaskResponseCommentList
                 .parallelStream()
-                .map(spiderResponseComment -> from(newsId, spiderResponseComment))
+                .map(commentSpiderTaskResponseComment -> from(newsId, commentSpiderTaskResponseComment))
                 .collect(Collectors.toList());
     }
 }

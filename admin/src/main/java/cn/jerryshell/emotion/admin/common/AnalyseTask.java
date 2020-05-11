@@ -65,7 +65,7 @@ public class AnalyseTask implements Runnable {
                 e.printStackTrace();
             }
             if (StrUtil.isBlank(response)) {
-                log.warn("调用情感分析接口发生错误");
+                log.error("调用情感分析接口发生错误");
                 return;
             }
 

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateAnalyseTask {
+public class AnalyseTaskCreate {
     @NotBlank
     private String taskId;
 }

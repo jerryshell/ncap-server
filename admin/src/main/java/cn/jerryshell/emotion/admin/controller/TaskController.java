@@ -5,10 +5,10 @@ import cn.jerryshell.emotion.admin.common.AnalyseTask;
 import cn.jerryshell.emotion.admin.common.R;
 import cn.jerryshell.emotion.admin.entity.Comment;
 import cn.jerryshell.emotion.admin.entity.Task;
-import cn.jerryshell.emotion.admin.entity.dto.CreateAnalyseTask;
-import cn.jerryshell.emotion.admin.entity.dto.CreateTask;
-import cn.jerryshell.emotion.admin.entity.dto.SpiderResponse;
-import cn.jerryshell.emotion.admin.entity.dto.SpiderResponseComment;
+import cn.jerryshell.emotion.admin.entity.dto.AnalyseTaskCreate;
+import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskCreate;
+import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskResponse;
+import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskResponseComment;
 import cn.jerryshell.emotion.admin.service.CommentService;
 import cn.jerryshell.emotion.admin.service.TaskService;
 import com.alibaba.fastjson.JSON;
@@ -63,12 +63,12 @@ public class TaskController {
 
     @PostMapping("/task/create")
     public R<?> createTask(
-            @Valid @RequestBody CreateTask createTask
+            @Valid @RequestBody CommentSpiderTaskCreate commentSpiderTaskCreate
     ) {
-        log.info("{}", createTask);
+        log.info("{}", commentSpiderTaskCreate);
 
         // 提取 newsId
-        @NotBlank String newsUrl = createTask.getNewsUrl();
+        @NotBlank String newsUrl = commentSpiderTaskCreate.getNewsUrl();
         String[] split = newsUrl.split("/");
         log.info(Arrays.toString(split));
         String html = split[split.length - 1];
@@ -144,10 +144,10 @@ public class TaskController {
     @PostMapping("/task/spiderNotify/{taskId}")
     public R<?> spiderNotify(
             @PathVariable String taskId,
-            @RequestBody SpiderResponse spiderResponse
+            @RequestBody CommentSpiderTaskResponse commentSpiderTaskResponse
     ) {
         log.info(taskId);
-        log.info("{}", spiderResponse);
+        log.info("{}", commentSpiderTaskResponse);
 
         // 获取该任务信息
         Task task = taskService.getById(taskId);
@@ -157,14 +157,14 @@ public class TaskController {
         }
 
         // 更新任务状态
-        if (!spiderResponse.getOk()) {
-            task.setNewsTitle(spiderResponse.getTitle());
+        if (!commentSpiderTaskResponse.getOk()) {
+            task.setNewsTitle(commentSpiderTaskResponse.getTitle());
             task.setStatus(Task.STATUS_SPIDER_FAIL);
             taskService.updateById(task);
             log.error("采集失败 {}", task);
             return R.ok();
         }
-        task.setNewsTitle(spiderResponse.getTitle());
+        task.setNewsTitle(commentSpiderTaskResponse.getTitle());
         task.setPCount(0);
         task.setNCount(0);
         task.setProgress(0);
@@ -172,11 +172,11 @@ public class TaskController {
         taskService.updateById(task);
 
         // 提取评论列表
-        List<SpiderResponseComment> spiderResponseCommentList = spiderResponse.getCommentList();
-        log.info("{}", spiderResponseCommentList);
+        List<CommentSpiderTaskResponseComment> commentSpiderTaskResponseCommentList = commentSpiderTaskResponse.getCommentList();
+        log.info("{}", commentSpiderTaskResponseCommentList);
 
         // 根据 spiderResponseCommentList 生成 commentList
-        List<Comment> commentList = Comment.from(task.getNewsId(), spiderResponseCommentList);
+        List<Comment> commentList = Comment.from(task.getNewsId(), commentSpiderTaskResponseCommentList);
 
         // 评论去重
         commentList = commentList.parallelStream().distinct().collect(Collectors.toList());
@@ -193,11 +193,11 @@ public class TaskController {
 
     @PostMapping("/task/createAnalyseTask")
     public R<?> createAnalyseTask(
-            @Valid @RequestBody CreateAnalyseTask createAnalyseTask
+            @Valid @RequestBody AnalyseTaskCreate analyseTaskCreate
     ) {
-        log.info(createAnalyseTask.toString());
+        log.info(analyseTaskCreate.toString());
 
-        @NotBlank String taskId = createAnalyseTask.getTaskId();
+        @NotBlank String taskId = analyseTaskCreate.getTaskId();
         Task task = taskService.getById(taskId);
         log.info("{}", task);
         if (task == null) {
