@@ -134,7 +134,10 @@ public class TaskController {
         data.put("news_id", task.getNewsId());
         data.put("news_url", task.getNewsUrl());
         data.put("notify_url", notifyUrl);
-        String response = HttpRequest.post(String.format("%s/createTask", spiderServer))
+        String response = HttpRequest.post(String.format(
+                "%s/create/commentSpiderTask",
+                spiderServer
+        ))
                 .body(JSON.toJSONString(data))
                 .execute()
                 .body();
