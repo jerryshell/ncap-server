@@ -47,6 +47,7 @@ public class InfoController {
         String result = "{\"ok\":false}";
         try {
             result = HttpRequest.get(String.format("%s/info", spiderServer))
+                    .timeout(1000)
                     .execute()
                     .body();
         } catch (Exception e) {
@@ -59,6 +60,7 @@ public class InfoController {
         String result = "{\"ok\":false}";
         try {
             result = HttpRequest.get(String.format("%s/info", analyseServer))
+                    .timeout(1000)
                     .execute()
                     .body();
         } catch (Exception e) {
