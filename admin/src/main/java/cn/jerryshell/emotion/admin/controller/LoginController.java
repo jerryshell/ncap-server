@@ -1,7 +1,6 @@
 package cn.jerryshell.emotion.admin.controller;
 
 import cn.hutool.core.util.IdUtil;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 

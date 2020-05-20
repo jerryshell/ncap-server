@@ -10,6 +10,7 @@ import cn.jerryshell.emotion.admin.service.TaskService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,8 @@ public class AnalyseTask implements Runnable {
             double n = analyseResponse.getN();
             comment.setP(p);
             comment.setN(n);
+            comment.setCreateDateTime(LocalDateTime.now());
+            comment.setUpdateDateTime(LocalDateTime.now());
             commentService.saveOrUpdate(comment);
 
             // 更新评论计数，如果正负面概率不大于 60，表示该评论可能为中立评论，跳过计数

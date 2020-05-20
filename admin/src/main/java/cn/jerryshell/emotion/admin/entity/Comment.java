@@ -1,9 +1,7 @@
 package cn.jerryshell.emotion.admin.entity;
 
 import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskResponseComment;
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,9 +27,7 @@ public class Comment {
     // 负面评论概率
     private double n;
 
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createDateTime;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDateTime;
 
     public static Comment from(String newsId, CommentSpiderTaskResponseComment commentSpiderTaskResponseComment) {
@@ -39,6 +35,7 @@ public class Comment {
         comment.setId(commentSpiderTaskResponseComment.getCommentId());
         comment.setNewsId(newsId);
         comment.setContent(commentSpiderTaskResponseComment.getContent());
+        comment.setCreateDateTime(LocalDateTime.now());
         return comment;
     }
 

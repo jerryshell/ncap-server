@@ -1,8 +1,6 @@
 package cn.jerryshell.emotion.admin.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,8 +41,6 @@ public class Task {
     // 进度
     private Integer progress;
 
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createDateTime;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateDateTime;
 }

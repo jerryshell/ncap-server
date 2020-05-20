@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,14 @@ public class TaskController {
         queryWrapper.orderByDesc("create_date_time");
         Page<Task> page = taskService.page(new Page<>(pageNum, pageSize), queryWrapper);
         return R.ok(page);
+    }
+
+    @GetMapping("/task/list/running")
+    public R<List<Task>> listByRunning() {
+        QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_date_time");
+        queryWrapper.lt("progress", 100);
+        return R.ok(taskService.list(queryWrapper));
     }
 
     @GetMapping("/task/getById/{id}")
@@ -85,6 +94,7 @@ public class TaskController {
         task.setNCount(0);
         task.setProgress(0);
         task.setStatus(Task.STATUS_SPIDER);
+        task.setCreateDateTime(LocalDateTime.now());
         taskService.save(task);
 
         // 启动采集任务
@@ -111,6 +121,7 @@ public class TaskController {
         task.setNCount(0);
         task.setProgress(0);
         task.setStatus(Task.STATUS_SPIDER);
+        task.setUpdateDateTime(LocalDateTime.now());
         taskService.updateById(task);
 
         // 删除旧评论
@@ -163,6 +174,7 @@ public class TaskController {
         if (!commentSpiderTaskResponse.getOk()) {
             task.setNewsTitle(commentSpiderTaskResponse.getTitle());
             task.setStatus(Task.STATUS_SPIDER_FAIL);
+            task.setUpdateDateTime(LocalDateTime.now());
             taskService.updateById(task);
             log.error("采集失败 {}", task);
             return R.ok();
@@ -172,17 +184,19 @@ public class TaskController {
         task.setNCount(0);
         task.setProgress(0);
         task.setStatus(Task.STATUS_ANALYSE);
+        task.setUpdateDateTime(LocalDateTime.now());
         taskService.updateById(task);
 
         // 提取评论列表
         List<CommentSpiderTaskResponseComment> commentSpiderTaskResponseCommentList = commentSpiderTaskResponse.getCommentList();
         log.info("{}", commentSpiderTaskResponseCommentList);
 
+        // 评论去重
+        commentSpiderTaskResponseCommentList = commentSpiderTaskResponseCommentList.parallelStream().distinct().collect(Collectors.toList());
+
         // 根据 spiderResponseCommentList 生成 commentList
         List<Comment> commentList = Comment.from(task.getNewsId(), commentSpiderTaskResponseCommentList);
 
-        // 评论去重
-        commentList = commentList.parallelStream().distinct().collect(Collectors.toList());
         log.info("{}", commentList);
 
         // 保存评论
@@ -212,6 +226,7 @@ public class TaskController {
         task.setNCount(0);
         task.setProgress(0);
         task.setStatus(Task.STATUS_ANALYSE);
+        task.setUpdateDateTime(LocalDateTime.now());
         taskService.updateById(task);
 
         // 启动分析任务
