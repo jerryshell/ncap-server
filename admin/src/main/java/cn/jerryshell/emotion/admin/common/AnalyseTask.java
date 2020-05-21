@@ -102,11 +102,13 @@ public class AnalyseTask implements Runnable {
                 log.info("负面新闻概率 {}}%", (task.getNCount() / countSum * 100));
             }
 
-            // 按阶段更新数据到数据库中
-            if (task.getProgress() % 5 == 0) {
-                log.info("按阶段更新数据到数据库中");
-                taskService.updatePCountAndNCountAndProgressById(task.getId(), task.getPCount(), task.getNCount(), task.getProgress());
-            }
+            // 更新数据到数据库中
+            taskService.updatePCountAndNCountAndProgressById(
+                    task.getId(),
+                    task.getPCount(),
+                    task.getNCount(),
+                    task.getProgress()
+            );
         }
 
         // 遍历结束，将任务标记为已完成
