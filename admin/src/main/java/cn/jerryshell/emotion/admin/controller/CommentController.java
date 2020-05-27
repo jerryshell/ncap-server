@@ -47,29 +47,29 @@ public class CommentController {
 
     @GetMapping("/comment/countPAndN")
     public Map<String, Object> countPAndN() {
-        LocalDateTime lastDay = LocalDateTime.now()
+        LocalDateTime startDateTime = LocalDateTime.now()
                 .withHour(0)
                 .withMinute(0)
                 .withSecond(0)
                 .withNano(0);
-        log.info("lastDay {}", lastDay);
+        log.info("startDateTime {}", startDateTime);
 
-        LocalDateTime today = LocalDateTime.now()
+        LocalDateTime endDateTime = LocalDateTime.now()
                 .withHour(23)
                 .withMinute(59)
                 .withSecond(59)
                 .withNano(999999999);
-        log.info("today {}", today);
+        log.info("endDateTime {}", endDateTime);
 
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("p", 50);
-        queryWrapper.between("update_date_time", lastDay, today);
+        queryWrapper.between("update_date_time", startDateTime, endDateTime);
         int pCount = commentService.count(queryWrapper);
         log.info("pCount {}", pCount);
 
         queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("n", 50);
-        queryWrapper.between("update_date_time", lastDay, today);
+        queryWrapper.between("update_date_time", startDateTime, endDateTime);
         int nCount = commentService.count(queryWrapper);
         log.info("nCount {}", nCount);
 
