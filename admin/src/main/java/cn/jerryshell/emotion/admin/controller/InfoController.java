@@ -1,7 +1,7 @@
 package cn.jerryshell.emotion.admin.controller;
 
 import cn.hutool.http.HttpRequest;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +26,10 @@ public class InfoController {
         result.put("server", getServerStatus());
 
         String spiderServerStatus = getSpiderServerStatus();
-        result.put("spiderServer", JSON.parseObject(spiderServerStatus, Map.class));
+        result.put("spiderServer", JSONUtil.toBean(spiderServerStatus, Map.class));
 
         String analyseServerStatus = getAnalyseServerStatus();
-        result.put("analyseServer", JSON.parseObject(analyseServerStatus, Map.class));
+        result.put("analyseServer", JSONUtil.toBean(analyseServerStatus, Map.class));
 
         return result;
     }

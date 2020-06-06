@@ -1,6 +1,7 @@
 package cn.jerryshell.emotion.admin.controller;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONUtil;
 import cn.jerryshell.emotion.admin.common.AnalyseTask;
 import cn.jerryshell.emotion.admin.common.R;
 import cn.jerryshell.emotion.admin.entity.Comment;
@@ -11,7 +12,6 @@ import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskResponse;
 import cn.jerryshell.emotion.admin.entity.dto.CommentSpiderTaskResponseComment;
 import cn.jerryshell.emotion.admin.service.CommentService;
 import cn.jerryshell.emotion.admin.service.TaskService;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -149,7 +149,7 @@ public class TaskController {
                 "%s/create/commentSpiderTask",
                 spiderServer
         ))
-                .body(JSON.toJSONString(data))
+                .body(JSONUtil.toJsonStr(data))
                 .execute()
                 .body();
         log.info(response);

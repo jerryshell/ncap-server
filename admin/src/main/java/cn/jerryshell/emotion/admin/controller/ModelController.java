@@ -1,9 +1,9 @@
 package cn.jerryshell.emotion.admin.controller;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONUtil;
 import cn.jerryshell.emotion.admin.entity.dto.ModelTest;
 import cn.jerryshell.emotion.admin.entity.dto.ModelUpdate;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,11 +42,12 @@ public class ModelController {
         updateModelFilenameData.put("model_filename", modelUpdate.getModelFilename());
         log.info("updateModelFilenameData {}", updateModelFilenameData);
 
+
         String updateModelFilenameResult = HttpRequest.post(String.format(
                 "%s/modelReload",
                 analyseServer
         ))
-                .body(JSON.toJSONString(updateModelFilenameData))
+                .body(JSONUtil.toJsonStr(updateModelFilenameData))
                 .execute()
                 .body();
         log.info("updateModelFilenameResult {}", updateModelFilenameResult);
@@ -64,7 +65,7 @@ public class ModelController {
                 "%s/zero",
                 analyseServer
         ))
-                .body(JSON.toJSONString(updateRealTimeTuning))
+                .body(JSONUtil.toJsonStr(updateRealTimeTuning))
                 .execute()
                 .body();
         log.info("updateRealTimeTuningResult {}", updateRealTimeTuningResult);
@@ -82,7 +83,7 @@ public class ModelController {
         log.info("{}", modelTestData);
 
         String response = HttpRequest.post(analyseServer)
-                .body(JSON.toJSONString(modelTestData))
+                .body(JSONUtil.toJsonStr(modelTestData))
                 .execute()
                 .body();
         log.info("{}", response);

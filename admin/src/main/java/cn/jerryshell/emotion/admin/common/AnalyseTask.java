@@ -2,12 +2,12 @@ package cn.jerryshell.emotion.admin.common;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONUtil;
 import cn.jerryshell.emotion.admin.entity.Comment;
 import cn.jerryshell.emotion.admin.entity.Task;
 import cn.jerryshell.emotion.admin.entity.dto.AnalyseResponse;
 import cn.jerryshell.emotion.admin.service.CommentService;
 import cn.jerryshell.emotion.admin.service.TaskService;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -58,7 +58,7 @@ public class AnalyseTask implements Runnable {
             String response = null;
             try {
                 response = HttpRequest.post(analyseServer)
-                        .body(JSON.toJSONString(data))
+                        .body(JSONUtil.toJsonStr(data))
                         .execute()
                         .body();
                 log.info(response);
@@ -71,7 +71,7 @@ public class AnalyseTask implements Runnable {
             }
 
             // 解析情感分析接口响应
-            AnalyseResponse analyseResponse = JSON.parseObject(response, AnalyseResponse.class);
+            AnalyseResponse analyseResponse = JSONUtil.toBean(response, AnalyseResponse.class);
             log.info(analyseResponse.toString());
 
             // 如果不能成功直接跳到下一个评论
