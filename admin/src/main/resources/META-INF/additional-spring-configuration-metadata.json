@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "ncap.analyse.server",
+      "type": "java.lang.String",
+      "description": "情感分析模块 API 地址."
+    },
+    {
+      "name": "ncap.analyse.server.token",
+      "type": "java.lang.String",
+      "description": "情感分析模块 API Token."
+    },
+    {
+      "name": "ncap.spider.server",
+      "type": "java.lang.String",
+      "description": "数据采集模块 API 地址."
+    },
+    {
+      "name": "ncap.notify.server",
+      "type": "java.lang.String",
+      "description": "任务回调 API 地址."
+    }
+  ]
+}

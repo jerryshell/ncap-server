@@ -6,13 +6,14 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
-    <groupId>cn.jerryshell.emotion</groupId>
+
+    <groupId>io.github.jerryshell.ncap</groupId>
     <artifactId>admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>admin</name>
-    <description>Demo project for Spring Boot</description>
+    <description>NCAP - News comment analysis platform</description>
 
     <properties>
         <java.version>1.8</java.version>
